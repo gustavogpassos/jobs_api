@@ -17,9 +17,9 @@ exports.create = async (req, res) => {
 
     const alreadyCreated = await middlewares.alreadyExists(company)
 
-    if (alreadyCreated.length > 0) {
+    if (alreadyCreated) {
         res.status(400).json({
-            message: 'Data already exists',
+            message: 'Company already exists',
         })
     } else {
         companyEntity.create(company).then(res.json(company))
