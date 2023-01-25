@@ -1,19 +1,29 @@
 const companyEntity = require('./../models/companiesModel')
 const { v4: uuid } = require('uuid')
 
+const middlewares = require('../middlewares/companiesMiddlewares')
+
 exports.create = async (req, res) => {
-    console.log(req.body)
-    const { name, email, phone, address, description } = req.body
+    const { cnpj, name, email, phone, address, description } = req.body
     const company = {
         id: uuid(),
         name,
+        cnpj,
         email,
         phone,
         address,
         description,
     }
 
-    companyEntity.create(company).then(res.json(company))
+    const alreadyCreated = await middlewares.alreadyExists(company)
+
+    if (alreadyCreated.length > 0) {
+        res.status(400).json({
+            message: 'Data already exists',
+        })
+    } else {
+        companyEntity.create(company).then(res.json(company))
+    }
 }
 
 exports.listAll = async (req, res) => {
@@ -39,5 +49,3 @@ exports.search = async (req, res) => {
     })
     res.json(company)
 }
-
-function alreadyExists(email) {}
