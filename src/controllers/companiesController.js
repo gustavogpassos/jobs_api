@@ -15,15 +15,13 @@ exports.create = async (req, res) => {
         description,
     }
 
-    const alreadyCreated = await middlewares.alreadyExists(company)
-
-    if (alreadyCreated) {
-        res.status(400).json({
-            message: 'Company already exists',
-        })
-    } else {
-        companyEntity.create(company).then(res.json(company))
-    }
+    await companyEntity.create(company, (err, data) => {
+        if (err) {
+            res.status(400).json(err)
+        } else {
+            res.status(201).json(company)
+        }
+    })
 }
 
 exports.listAll = async (req, res) => {

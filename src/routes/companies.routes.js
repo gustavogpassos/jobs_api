@@ -7,6 +7,6 @@ const controller = require('./../controllers/companiesController')
 companiesRouter.get('/', controller.listAll)
 companiesRouter.get('/:id', controller.filterById)
 companiesRouter.get('/search/:search', controller.search)
-companiesRouter.post('/new', controller.create)
+companiesRouter.post('/create', controller.create)
 
 module.exports = companiesRouter
