@@ -6,7 +6,7 @@ const middlewares = require('../middlewares/companiesMiddlewares')
 exports.create = async (req, res) => {
     const { cnpj, name, email, phone, address, description } = req.body
     const company = {
-        id: uuid(),
+        _id: uuid(),
         name,
         cnpj,
         email,
