@@ -17,7 +17,12 @@ exports.create = async (req, res) => {
 
     await companyEntity.create(company, (err, data) => {
         if (err) {
-            res.status(400).json(err)
+            if (err.code === 11000) {
+                const key = Object.keys(err.keyPattern)[0]
+                res.status(400).json({
+                    message: key + ' already registered',
+                })
+            }
         } else {
             res.status(201).json(company)
         }
@@ -25,25 +30,33 @@ exports.create = async (req, res) => {
 }
 
 exports.listAll = async (req, res) => {
-    console.log('function listAll')
-    res.json(await companyEntity.find())
+    companyEntity.find({}, (err, data) => {
+        if (err) {
+            res.status(400).json(err)
+        } else {
+            res.status(200).json(data)
+        }
+    })
 }
 
 exports.filterById = async (req, res) => {
-    console.log(req.params)
     const { id } = req.params
-    console.log(id)
-    const company = await companyEntity.findById(id)
-    res.json(company)
+    companyEntity.findById(id, (err, data) => {
+        res.status(200).json(data)
+    })
 }
 
 exports.search = async (req, res) => {
     var { search } = req.params
-    const company = await companyEntity.find({
-        $or: [
-            { name: { $regex: '.*' + search + '.*' } },
-            { email: { $regex: '.*' + search + '.*' } },
-        ],
-    })
-    res.json(company)
+    companyEntity.find(
+        {
+            $or: [
+                { name: { $regex: '.*' + search + '.*' } },
+                { email: { $regex: '.*' + search + '.*' } },
+            ],
+        },
+        (err, data) => {
+            res.status(200).json(data)
+        }
+    )
 }

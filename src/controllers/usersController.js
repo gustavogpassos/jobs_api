@@ -22,7 +22,6 @@ exports.create = async (req, res) => {
         if (err) {
             res.status(400).json(err.message)
         } else {
-            console.log(data)
             res.status(201).json(newUser)
         }
     })
