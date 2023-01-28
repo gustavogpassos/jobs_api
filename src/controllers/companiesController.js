@@ -3,7 +3,7 @@ const { v4: uuid } = require('uuid')
 
 const middlewares = require('../middlewares/companiesMiddlewares')
 
-exports.create = async (req, res) => {
+exports.create = (req, res) => {
     const { cnpj, name, email, phone, address, description } = req.body
     const company = {
         _id: uuid(),
@@ -15,7 +15,7 @@ exports.create = async (req, res) => {
         description,
     }
 
-    await companyEntity.create(company, (err, data) => {
+    companyEntity.create(company, (err, data) => {
         if (err) {
             if (err.code === 11000) {
                 const key = Object.keys(err.keyPattern)[0]
@@ -29,7 +29,7 @@ exports.create = async (req, res) => {
     })
 }
 
-exports.listAll = async (req, res) => {
+exports.listAll = (req, res) => {
     companyEntity.find({}, (err, data) => {
         if (err) {
             res.status(400).json(err)
@@ -39,14 +39,14 @@ exports.listAll = async (req, res) => {
     })
 }
 
-exports.filterById = async (req, res) => {
+exports.getCompanyById = (req, res) => {
     const { id } = req.params
     companyEntity.findById(id, (err, data) => {
         res.status(200).json(data)
     })
 }
 
-exports.search = async (req, res) => {
+exports.search = (req, res) => {
     var { search } = req.params
     companyEntity.find(
         {

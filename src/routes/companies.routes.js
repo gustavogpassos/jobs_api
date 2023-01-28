@@ -5,7 +5,7 @@ const companiesRouter = express.Router()
 const controller = require('./../controllers/companiesController')
 
 companiesRouter.get('/', controller.listAll)
-companiesRouter.get('/:id', controller.filterById)
+companiesRouter.get('/:id', controller.getCompanyById)
 companiesRouter.get('/search/:search', controller.search)
 companiesRouter.post('/create', controller.create)
 
